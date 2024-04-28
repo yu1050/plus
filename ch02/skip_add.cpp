@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 using namespace std;                      // make definitions visible
 
@@ -15,60 +16,36 @@ void readInts(vector<int> *p) {
     while (is >> num) (*p).push_back(num);
 }
 
-
-int skipAdd1(int *nums, int length, int k0, int k1) {
-    int total = 0;
-    for (int i = 0; i < length; i++) {
-        if (i < k0 || i > k1) {
-            total += nums[i];
-        }
-    }
-    return total;
-}
-
-
-int skipAdd2(int *nums, int length, int k0, int k1) {
-    int total = 0;
-    int
-            num11[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,};
-    for (int i = 0; i < k0; i++) {
-        num11[nums[i]]++;
-    }
-    for (int i = k1 + 1; i < length; i++) {
-        num11[nums[i]]++;
-    }
-    for (int i = 1; i < 11; ++i) {
-        total += num11[i] * i;
-    }
-    return total;
-}
-
 int main() {
 
-    vector<int> temp;
-    int count, round;
-    readInts(&temp);
-    count = temp.at(0);
-    round = temp.at(1);
+    vector<int> buffer;
+    int N, Q;
+    readInts(&buffer);
+    N = buffer.at(0);
+    Q = buffer.at(1);
 
-    temp.clear();
-    readInts(&temp);
-    int len = temp.size();
+    buffer.clear();
+    readInts(&buffer);
+//    int len = buffer.size();
 
-    int nums[len];
-    std::copy(temp.begin(), temp.end(), nums);
+    int nums[N];
+    std::copy(buffer.begin(), buffer.end(), nums);
+    for (int i = 1; i < N; i++) {
+        nums[i] += nums[i - 1];
+    }
 
-    for (int i = 0; i < round; i++) {
+    for (int i = 0; i < Q; i++) {
 
-        temp.clear();
-        readInts(&temp);
-        int k0, k1;
-        k0 = temp.at(0);
-        k1 = temp.at(1);
-
-        int value = skipAdd2(nums, len, k0 - 1, k1 - 1);
-
-        std::cout << value << endl;
+        buffer.clear();
+        readInts(&buffer);
+        int a = buffer.at(0) - 1;
+        int b = buffer.at(1) - 1;
+        if (a == 0) {
+            cout << nums[N - 1] - nums[b];
+        } else {
+            cout << nums[N - 1] - nums[b] + nums[a - 1];
+        }
+        cout << endl;
     }
 
     cout << endl;
